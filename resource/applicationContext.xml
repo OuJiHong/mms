@@ -41,12 +41,11 @@
 	
 	
 	<!--  aop 配置   -->
-<!-- 	<bean id="testAopBean" class="com.tmp.aop.TestAopBean"></bean> -->
-<!-- 	<aop:config> -->
-<!-- 		<aop:pointcut id="pointcut"  expression="within(com.tmp.service.impl..*)"></aop:pointcut> -->
-<!-- 		<aop:pointcut id="pointcut"  expression="execution(* com.tmp.service.impl.UserServiceImpl.add(..))"></aop:pointcut> -->
-<!-- 		<aop:advisor pointcut-ref="pointcut"  advice-ref="testAopBean"></aop:advisor> -->
-<!-- 	</aop:config> -->
+	<bean id="loggingSqlExecutionTime" class="com.tmp.aop.LoggingSqlExecutionTime"></bean>
+	<aop:config>
+		<aop:pointcut id="pointcut"  expression="execution(* com.tmp.dao..*(..))"></aop:pointcut>
+		<aop:advisor pointcut-ref="pointcut"  advice-ref="loggingSqlExecutionTime"></aop:advisor>
+	</aop:config>
 	
 	<!--  持久化单元	 -->
 	<bean id="localContainerEntityManager" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">

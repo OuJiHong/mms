@@ -3,10 +3,11 @@ package com.tmp.service.impl;
 import javax.annotation.Resource;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
-import org.springframework.transaction.annotation.Transactional;
 
-import com.tmp.dao.BaseDao;
 import com.tmp.dao.UserDao;
 import com.tmp.entity.User;
 import com.tmp.service.UserService;
@@ -37,24 +38,21 @@ public class UserServiceImpl extends BaseServiceImpl<User,Long> implements UserS
 		super.setBaseDao(userDao);
 	}
 	
-	public String getUserPath() {
-		return userPath;
-	}
+	
+	
+	/* (non-Javadoc)
+	 * @see com.tmp.service.UserService#currentUser()
+	 */
+	@Override
+	public UserDetails currentUser(){
+		Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+		Object principal = authentication.getPrincipal();
+		if(principal instanceof UserDetails){
+			return (UserDetails)principal;
+		}
+		return null;
+	} 
 
-	public void setUserPath(String userPath) {
-		this.userPath = userPath;
-	}
-
-
-	public UserDao getUserDao() {
-		return userDao;
-	}
-
-
-	public void setUserDao(UserDao userDao) {
-		this.userDao = userDao;
-	}
-
-
+	
 	
 }

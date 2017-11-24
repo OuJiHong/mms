@@ -1,5 +1,7 @@
 package com.tmp.service;
 
+import org.springframework.security.core.userdetails.UserDetails;
+
 import com.tmp.entity.User;
 
 
@@ -11,5 +13,10 @@ import com.tmp.entity.User;
  */
 public interface UserService extends BaseService<User,Long>{
 
+	/**
+	 * 获取当前用户
+	 * @return
+	 */
+	public UserDetails currentUser();
 	
 }

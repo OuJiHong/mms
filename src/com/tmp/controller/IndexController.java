@@ -10,10 +10,12 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.WebAttributes;
 import org.springframework.stereotype.Controller;
+import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 import com.tmp.service.CaptchaService;
+import com.tmp.service.UserService;
 
 /**
  * 入口
@@ -28,8 +30,13 @@ public class IndexController extends BaseController {
 	@Autowired
 	private CaptchaService captchService;
 	
+	@Autowired
+	private UserService userService;
+	
 	@RequestMapping(value={"/", "/index"})
-	public String index(){
+	public String index(Model model){
+		UserDetails user = userService.currentUser();//此处user与数据库中无关，只是配置文件中定义的用户
+		model.addAttribute("user", user);
 		return  "/index";
 	}
 	

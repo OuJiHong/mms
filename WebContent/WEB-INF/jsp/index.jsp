@@ -75,6 +75,8 @@
 		<div class="easyui-panel">
 			本机地址:<b>http://<%=java.net.InetAddress.getLocalHost().getHostAddress() %>:<%=request.getLocalPort() %></b>
 			<div style="float:right;padding-right:20px;">
+				<span>欢迎你<span style='color:red;'>${user.username}</span></span>
+				&nbsp;&nbsp;
 				<a href="${base}/logout">退出</a>
 			</div>
 		</div>
