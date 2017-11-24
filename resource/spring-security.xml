@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:context="http://www.springframework.org/schema/context"
+		xmlns:security="http://www.springframework.org/schema/security"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+		xsi:schemaLocation="http://www.springframework.org/schema/beans 
+			http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+			http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd
+        http://www.springframework.org/schema/security 
+        http://www.springframework.org/schema/security/spring-security-3.2.xsd
+       ">
+	
+	<security:authentication-manager alias="authenticationManager">
+		<security:authentication-provider>
+			<security:user-service>
+				<security:user name="ojh" password="ojh123456" authorities="ROLE_USER"/>
+			</security:user-service>
+		</security:authentication-provider>
+	</security:authentication-manager>
+	
+	<!--  两个星号代表匹配所有后代路径 -->
+	<security:http pattern="/resources/**"  security="none"/>
+	<security:http pattern="/static/**"  security="none"/>
+	<security:http pattern="/captcha"  security="none"/>
+	<security:http pattern="/loginPage"  security="none"/>
+	
+	<!--  使用默认授权规则的RoleVoter, 需要以“ROLE_”开头 -->
+	<security:http entry-point-ref="customAuthenticationEntryPoint">
+		<security:intercept-url pattern="/**"  access="ROLE_USER"/>
+		<security:custom-filter position="FORM_LOGIN_FILTER" ref="customAuthenticationFilter"/>
+		<security:logout logout-url="/logout" invalidate-session="true"/>
+		<security:session-management >
+			<security:concurrency-control max-sessions="1" error-if-maximum-exceeded="true"/>
+		</security:session-management>
+	</security:http>
+	
+	
+	<bean id="authenticationSuccessHandler" class="org.springframework.security.web.authentication.SavedRequestAwareAuthenticationSuccessHandler">
+		<property name="defaultTargetUrl" value="/index"/>
+	</bean>
+	
+	<bean id="authenticationFailureHandler" class="org.springframework.security.web.authentication.SimpleUrlAuthenticationFailureHandler">
+		<property name="defaultFailureUrl" value="/loginPage"/>
+	</bean>
+	
+	<bean id="customAuthenticationFilter" class="com.tmp.auth.CustomAuthenticationFilter">
+		<constructor-arg  index="0" value="/loginSubmit"/>
+		<constructor-arg  index="1" ref="captchaServiceImpl"/>
+		<property name="authenticationManager" ref="authenticationManager"/>
+		<property name="authenticationSuccessHandler" ref="authenticationSuccessHandler"/>
+		<property name="authenticationFailureHandler" ref="authenticationFailureHandler"/>
+	</bean>
+	
+	<bean id="customAuthenticationEntryPoint" class="com.tmp.auth.CustomAuthenticationEntryPoint">
+		<constructor-arg value="/loginPage"/>
+	</bean>
+	
+</beans>

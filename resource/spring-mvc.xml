@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+		xmlns:context="http://www.springframework.org/schema/context"
+		xmlns:mvc="http://www.springframework.org/schema/mvc"
+		xmlns:aop="http://www.springframework.org/schema/aop"
+		xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" 
+		xsi:schemaLocation="http://www.springframework.org/schema/beans 
+			http://www.springframework.org/schema/beans/spring-beans-3.2.xsd
+			http://www.springframework.org/schema/context 
+        http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/mvc
+       http://www.springframework.org/schema/mvc/spring-mvc-3.2.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop.xsd
+       ">
+	
+	
+	<context:component-scan base-package="com.tmp.*" use-default-filters="false">
+		<context:include-filter type="annotation" expression="org.springframework.stereotype.Controller"/>
+	</context:component-scan>
+	
+	<!--  jackson 可以不注册，RequestmappingHandlerAdapter 中已经注册了 -->
+	<mvc:annotation-driven>
+		<mvc:message-converters>
+			<bean class="org.springframework.http.converter.BufferedImageHttpMessageConverter"></bean>
+			<bean class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter"></bean>
+		</mvc:message-converters>
+	</mvc:annotation-driven>
+	
+	<!--  拦截器	 -->
+	<mvc:interceptors>
+		<mvc:interceptor>
+			<mvc:mapping path="/**" />
+			<bean id="openSessionInViewInterceptor" class="org.springframework.orm.jpa.support.OpenEntityManagerInViewInterceptor">
+				<property name="entityManagerFactory" ref="localContainerEntityManager"  />
+			</bean>
+		</mvc:interceptor>
+	</mvc:interceptors>
+	
+	
+	
+	<!--  配置一个静态资源或者默认servlet,不会被DefaultServlet处理,直接读取，并设置了内容长度？？	 -->
+<!-- 	<mvc:resources location="/static/" mapping="/static/*"/> -->
+	
+	<!--  使用默认的servlet	 -->
+	<mvc:default-servlet-handler />
+	
+	
+	<bean id="placeholder" class="org.springframework.beans.factory.config.PreferencesPlaceholderConfigurer">
+<!-- 		<property name="ignoreUnresolvablePlaceholders" value="true"/> -->
+		<property name="locations">
+			<array>
+				<value>classpath:config.properties</value>
+			</array>
+		</property>
+	</bean>
+	
+	<!--  所有处理控制器都有dispatcherServlet完成，所以控制器映射的bean都需要由dispatcherServlet的配置初始化  -->
+	
+	<!--  配置一个error视图映射	 -->
+	<mvc:view-controller path="/error" view-name="error"/>
+	
+	<!--  资源未找到	 -->
+	<mvc:view-controller  path="/404"  view-name="404"/>
+	
+	<bean id="multipartResolver" class="org.springframework.web.multipart.commons.CommonsMultipartResolver">
+		<property name="defaultEncoding" value="UTF-8" />
+		<property name="maxUploadSize" value="2048000" />
+	</bean>
+
+	<bean id="error" class="com.tmp.exception.CustomExceptionResolver">
+		<property name="order" value="0" />
+		<property name="defaultErrorView" value="error"/>
+		<property name="defaultStatusCode" value="500"/>
+	</bean>
+	
+	<bean id="viewResolver" class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+		<property name="contentType" value="text/html;charset=utf-8"/>
+		<property name="prefix" value="/WEB-INF/jsp/"/>
+		<property name="suffix"  value=".jsp"/>
+		<property name="requestContextAttribute" value="rc"/>
+	</bean>
+	
+	
+	<!--  设置系统变量	 -->
+<!-- 	<bean class="org.springframework.beans.factory.config.MethodInvokingFactoryBean"  init-method="invoke"> -->
+<!-- 		<property name="staticMethod" value="java.lang.System.setProperty"/> -->
+<!-- 		<property name="arguments" > -->
+<!-- 			<array> -->
+<!-- 				<value>file.encoding</value> -->
+<!-- 				<value>UTF-8</value> -->
+<!-- 			</array> -->
+<!-- 		</property> -->
+<!-- 	</bean> -->
+	
+</beans>

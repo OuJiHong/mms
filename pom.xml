@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3c.org/2001/XMLSchema-instance"
+ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+	<modelVersion>4.0.0</modelVersion>
+	<groupId>com.tmp</groupId>
+	<artifactId>mms</artifactId>
+	<version>SNAPSHOTS-0.0.1</version>
+	<packaging>war</packaging>
+	
+	
+	<!--  配置	 -->
+	<properties>
+		<hibernate-version>3.6.9.Final</hibernate-version>
+		<spring-version>3.2.2.RELEASE</spring-version>
+		<jackson-version>2.9.0</jackson-version>
+		<log4j-version>2.8.1</log4j-version>
+	</properties>
+	
+	<dependencies>
+		
+		<dependency>
+		  <groupId>org.apache.tomcat</groupId>
+		  <artifactId>tomcat-servlet-api</artifactId>
+		  <version>8.0.28</version>
+		  <scope>provided</scope>
+		</dependency>
+
+		<!-- for JPA, use hibernate-entitymanager instead of hibernate-core -->
+		<dependency>
+		    <groupId>org.hibernate</groupId>
+		    <artifactId>hibernate-entitymanager</artifactId>
+		    <version>${hibernate-version}</version>
+		</dependency>
+		<dependency>
+		  <groupId>org.hibernate</groupId>
+		  <artifactId>hibernate-validator</artifactId>
+		  <version>4.2.0.Final</version>
+		</dependency>
+		
+		<!--  spring 	 -->
+		<dependency>
+	        <groupId>org.springframework</groupId>
+	        <artifactId>spring-context</artifactId>
+	        <version>${spring-version}</version>
+	        <exclusions>
+	        	<exclusion>
+	        		<groupId>commons-logging</groupId>
+	        		<artifactId>commons-logging</artifactId>
+	        	</exclusion>
+	        </exclusions>
+    	</dependency>
+    	<dependency>
+    		<groupId>org.springframework</groupId>
+    		<artifactId>spring-orm</artifactId>
+    		<version>${spring-version}</version>
+    	</dependency>
+		<dependency>
+	        <groupId>org.springframework</groupId>
+	        <artifactId>spring-webmvc</artifactId>
+	        <version>${spring-version}</version>
+    	</dependency>
+    	
+    	<!--  spring security  -->
+    	<dependency>
+		  <groupId>org.springframework.security</groupId>
+		  <artifactId>spring-security-web</artifactId>
+		 <version>${spring-version}</version>
+		</dependency>
+    	<dependency>
+		  <groupId>org.springframework.security</groupId>
+		  <artifactId>spring-security-config</artifactId>
+		 <version>${spring-version}</version>
+		</dependency>
+
+		<!--  freemarker -->
+		<dependency>
+		  <groupId>org.freemarker</groupId>
+		  <artifactId>freemarker</artifactId>
+		  <version>2.3.20</version>
+		</dependency>
+		
+		<!--  jackson  -->
+		<dependency>
+		    <groupId>com.fasterxml.jackson.core</groupId>
+		    <artifactId>jackson-databind</artifactId>
+		    <version>${jackson-version}</version>
+	  	</dependency>
+		
+		<!--  mysql connector -->
+		<dependency>
+		  <groupId>mysql</groupId>
+		  <artifactId>mysql-connector-java</artifactId>
+		  <version>5.1.43</version>
+		</dependency>
+		
+		<!--  log4j  -->
+		<dependency>
+		  <groupId>org.apache.logging.log4j</groupId>
+		  <artifactId>log4j-core</artifactId>
+		  <version>${log4j-version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.apache.logging.log4j</groupId>
+			<artifactId>log4j-jcl</artifactId>
+			<version>${log4j-version}</version>
+		</dependency>
+		
+		<dependency>
+		  <groupId>org.apache.logging.log4j</groupId>
+		  <artifactId>log4j-slf4j-impl</artifactId>
+		  <version>${log4j-version}</version>
+		 </dependency>
+		 
+		 <!--  apache commons -->
+		 <dependency>
+		  <groupId>commons-fileupload</groupId>
+		  <artifactId>commons-fileupload</artifactId>
+		  <version>1.2</version>
+		</dependency>
+		
+		<dependency>
+		  <groupId>commons-io</groupId>
+		  <artifactId>commons-io</artifactId>
+		  <version>1.2</version>
+		</dependency>
+
+		<dependency>
+		  <groupId>commons-codec</groupId>
+		  <artifactId>commons-codec</artifactId>
+		  <version>1.2</version>
+		</dependency>
+		
+		<dependency>
+		  <groupId>commons-lang</groupId>
+		  <artifactId>commons-lang</artifactId>
+		  <version>2.6</version>
+		</dependency>
+		
+	</dependencies>
+	
+	<!--  build  -->
+	<build>
+		<finalName>mms</finalName>
+		<sourceDirectory>src</sourceDirectory>
+		<scriptSourceDirectory>src/scripts</scriptSourceDirectory>
+		<resources>
+			<resource>
+				<directory>resource</directory>
+			</resource>
+		</resources>
+		<plugins>
+			<plugin>
+		        <groupId>org.apache.maven.plugins</groupId>
+		        <artifactId>maven-compiler-plugin</artifactId>
+		        <version>3.1</version>
+		        <configuration>
+		          <verbose>true</verbose>
+				  <encoding>utf-8</encoding>
+				  <source>1.7</source>
+				  <target>1.7</target>	
+				  <showWarnings>true</showWarnings>          
+		        </configuration>
+	      	</plugin>
+	      	
+	      	<plugin>
+	      		<artifactId>maven-war-plugin</artifactId>
+	      		<configuration>
+	      			<webappDirectory>WebContent</webappDirectory>
+	      		</configuration>
+	      	</plugin>
+	      	
+		</plugins>
+	</build>
+	
+	
+</project>
